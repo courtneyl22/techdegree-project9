@@ -1,8 +1,12 @@
-'use strict';
+/*******
+ Project 9 - REST API 
+*******/
 
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const courseRoute = require('./routes/courseRoutes');
+const userRoute = require('./routes/userRoutes');
 
 // variable to enable global error logging
 const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'true';
@@ -10,10 +14,12 @@ const enableGlobalErrorLogging = process.env.ENABLE_GLOBAL_ERROR_LOGGING === 'tr
 // create the Express app
 const app = express();
 
+
 // setup morgan which gives us http request logging
 app.use(morgan('dev'));
-
-// TODO setup your api routes here
+app.use(express.json());
+app.use('/api', courseRoute);
+app.use('/api', userRoute);
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
