@@ -14,7 +14,7 @@ const auth = require('basic-auth');
 */
 
 const authenticatedUser = async (req, res, next) => {
-   let message = null;
+  let message = null;
   const credentials = auth(req);
   if (credentials) {
     const user = await User.findOne({ where: {emailAddress: credentials.name} });
@@ -23,6 +23,7 @@ const authenticatedUser = async (req, res, next) => {
         .compareSync(credentials.pass, user.password);
       if (authenticated) {
         req.currentUser = user;
+        console.log('Login successful');
       } else {
         message = `Authentication failure for username: ${user.username}`;
       }
@@ -78,10 +79,10 @@ router.post('/courses', authenticatedUser, async (req, res, next) => {
   try {
     const course = req.body;
     const newCourse = await Course.create(course)
-    res.location(`/courses/${newCourse.userId}`)
+    res.location(`/courses/${newCourse.id}`)
     res.status(201).end();
   } catch (error) {
-    // error.status = 400;
+    error.status = 400;
     return next(error)
   };
 });
@@ -89,18 +90,18 @@ router.post('/courses', authenticatedUser, async (req, res, next) => {
 //updates a course and returns no content
 router.put('/courses/:id', async (req, res) => {
     const course = await Course.findByPk(req.params.id)
-    if(course.userId === req.body.userId) {
+    if(course.id === req.body.id) {
       await course.update(req.body);
       res.status(204).end();
     } else {
-     res.status(401).json({message: "You're not authorized to delete this course."});
+     res.status(401).json({message: "You're not authorized to modify this course."});
     }
 })
 
 //deletes a course and returns no content
 router.delete('/courses/:id', authenticatedUser, async (req, res, next) => { 
     const course = await Course.findByPk(req.params.id)
-    if(course.userId === req.body.userId) {
+    if(course) {
      await course.destroy();
      res.status(204).end();
     }

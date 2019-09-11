@@ -7,7 +7,7 @@ const Sequelize = require('sequelize')
 module.exports = (sequelize) => {
   class Course extends Sequelize.Model {}
   Course.init({ 
-    userId: {
+    id: {
       type: Sequelize.INTEGER,
       primaryKey: true,
       autoIncrement: true

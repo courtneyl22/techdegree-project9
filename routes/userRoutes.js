@@ -56,6 +56,9 @@ router.get('/users', authenticatedUser, (req, res) => {
 
 //creates a user, sets the location header to '/', & returns no content
 router.post('/users',  async (req, res, next) => {
+  if (JSON.stringify(req.body) === '{}') {
+    res.status(400).json({message: 'No empty objects'});
+  }
  try {
     if(req.body.password){
       req.body.password = await bcryptjs.hashSync(req.body.password);
