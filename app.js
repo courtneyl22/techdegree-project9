@@ -5,6 +5,7 @@
 // load modules
 const express = require('express');
 const morgan = require('morgan');
+const { sequelize } = require('./models');
 const courseRoute = require('./routes/courseRoutes');
 const userRoute = require('./routes/userRoutes');
 
@@ -20,6 +21,22 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use('/api', courseRoute);
 app.use('/api', userRoute);
+
+// Testing database connection
+(async () => {
+  try {
+    console.log("Testing Connection...")
+    await sequelize.authenticate();
+    console.log("Connection successful!");
+    
+    // syncing
+    console.log('Connecting models to the database...');
+    await sequelize.sync();
+
+  } catch (err) {
+    console.error('Error connecting to the database: ', err); 
+  }
+})();
 
 // setup a friendly greeting for the root route
 app.get('/', (req, res) => {
