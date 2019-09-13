@@ -44,14 +44,14 @@ Course Routes
 
 Validations
 - The POST and PUT routes validate if the request body contains the following required values:
-  1. User
-     a. firstName
-     b. lastName
-     c. emailAddress
-     d. password
-  2. Course
-     a.title
-     b. description
+  1. User:
+    a. firstName
+    b. lastName
+    c. emailAddress
+    d. password
+  2. Course:
+    a.title
+    b. description
 - Validation error(s) are sent with a400 status code
 
 Password Security
